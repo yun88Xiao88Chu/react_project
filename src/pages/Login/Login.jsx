@@ -4,15 +4,28 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import logo from "./images/logo.png";
 import  "./css/login.less";
+import {reqLogin} from "../../api";
+
+const {Item} = Form
+
+
 
 export default class Login extends Component {
 
-  onFinish = values => {
-    console.log('Received values of form: ', values);
+  onFinish = async values => {
+    // console.log('Received values of form: ', values);
+    let result = await reqLogin(values)
+    console.log(result)
   };
 
-  myValidator = ()=>{
-    
+  pwValidator = (_,value='')=>{
+    let errMsgArr = []
+      if(!value || !value.trim()) return Promise.reject('密码不能为空')
+      if(value.length < 4) errMsgArr.push('密码长度必须大于4')
+      if(value.length > 12) errMsgArr.push('密码长度必须小于12')
+      if(!(/^\w+$/).test(value)) errMsgArr.push('必须是英文、数字或下划线组成')
+      if(errMsgArr !== 0) return Promise.reject(errMsgArr)
+      else return Promise.resolve()
   }
 
   render() {
@@ -24,36 +37,45 @@ export default class Login extends Component {
          </header>
          <section>
             <span className='title'>用户登录</span>
+            {/*
+              用户名/密码的的合法性要求
+                1). 必须输入
+                2). 必须大于等于4位
+                3). 必须小于等于12位
+                4). 必须是英文、数字或下划线组成
+           */}
             <Form
               className='login-form'
               onFinish={this.onFinish}
             >
-              <Form.Item
+              <Item
+                name= 'username'  // 不写name规则不生效
                 rules={[
-                  {required:true,message:'用户名必须输入！'},
-								  {min:4,message:'用户名必须大于等于4位！'},
-							    {max:12,message:'用户名必须小于等于12位！'},
-							  	{pattern:/^\w+$/,message:'用户名必须是英文、数字、下划线组成！'},
+                  {required:true,message:'用户名必须输入!'},
+                  {min:4,message:'长度必须大于等于4!'},
+                  {max:12,message:'长度必须小于等于12'},
+                  {pattern:/^\w+$/,message:'必须是英文、数字或下划线组成!'}
                 ]}
               >
                 <Input 
                 prefix={<UserOutlined className="site-form-item-icon" />} 
                 placeholder="用户名" />
-              </Form.Item>
-              <Form.Item
-               rules={[{validator:this.myValidator}]}
+              </Item>
+              <Item
+                name='password'
+                rules={[{validator:this.pwValidator}]}
               >
                 <Input
                   prefix={<LockOutlined className="site-form-item-icon" />}
                   type="password"
                   placeholder="密码"
                 />
-              </Form.Item>
-              <Form.Item>
+              </Item>
+              <Item>
                 <Button type="primary" htmlType="submit" className="login-form-button">
                   登录
                 </Button>
-              </Form.Item>
+              </Item>
             </Form>
          </section>
       </div>
