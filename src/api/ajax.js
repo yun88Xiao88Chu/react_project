@@ -2,7 +2,7 @@ import axios from 'axios';
 import qs from "querystring";
 import { message as msg } from "antd";
 
-axios.defaults.baseURL = 'http://localhost:3000'
+axios.defaults.baseURL = '/api'
 axios.defaults.timeout = 2000
 
 axios.interceptors.request.use((config)=>{

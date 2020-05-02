@@ -4,7 +4,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import logo from "./images/logo.png";
 import  "./css/login.less";
-import {reqLogin} from "../../api";
+import {reqLogin} from "@/api";
 
 const {Item} = Form
 
