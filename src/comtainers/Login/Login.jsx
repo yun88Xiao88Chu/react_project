@@ -22,7 +22,6 @@ class Login extends Component {
       message.success('登录成功!',1)
       // console.log(data)
       this.props.saveUserInfo(data)
-      this.props.history.replace('/admin')
     }else if(msg){
       message.error(msg)
     }

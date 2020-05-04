@@ -1,25 +1,30 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux"
 import { Redirect } from "react-router-dom";
-import { deleteUserInfo } from "@/redux/actions/login";
+import { Layout } from 'antd';
+import Header from "./Header/Header";
+import "./css/admin.less";
+
+const { Footer, Sider, Content } = Layout;
+
 class Admin extends Component {
-  logout = ()=>{
-    //函数体
-    this.props.deleteUserInfo()
-  }
+  
   render() {
     if(!this.props.isLogin) return <Redirect to='/login'/>
     return (
-      <div>
-         <button onClick={this.logout}>退出</button>
-      </div>
+      <Layout className='admin-container'>
+        <Sider>Sider</Sider>
+        <Layout>
+          <Header className='header'/>
+          <Content>Content</Content>
+          <Footer>Footer</Footer>
+        </Layout>
+      </Layout>
     )
   }
 }
 
 export default connect(
-  state => ({
-    username:state.userInfo.user.username,
-    isLogin:state.userInfo.isLogin}),
-  {deleteUserInfo}
+  state => ({isLogin:state.userInfo.isLogin}),
+  {}
 )(Admin)

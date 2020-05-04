@@ -2,8 +2,8 @@ import { SAVE_USERINFO,DELETE_USERINFO } from "../action_type";
 let _user
 try {
   _user = JSON.parse(localStorage.getItem('user_key'))
-  const a = JSON.parse(localStorage.getItem('demo'))
-  console.log(localStorage.getItem('demo'),a)
+  // const a = JSON.parse(localStorage.getItem('demo'))
+  // console.log(localStorage.getItem('demo'),a)
 } catch (error) {
   _user = null
 }
