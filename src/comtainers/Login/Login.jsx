@@ -4,6 +4,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { saveUserInfo } from "@/redux/actions/login";
+import Check from "@/comtainers/Hoc/Check";
 import logo from "./images/logo.png";
 import  "./css/login.less";
 import {reqLogin} from "@/api";
@@ -11,7 +12,11 @@ import {reqLogin} from "@/api";
 const {Item} = Form
 
 
-
+@connect(
+  state=>({isLogin:state.userInfo.isLogin}),
+  {saveUserInfo}
+)
+@Check
 class Login extends Component {
 
   onFinish = async values => {
@@ -38,7 +43,6 @@ class Login extends Component {
   }
 
   render() {
-    if(this.props.isLogin) return <Redirect to='/admin'/>
     return (
       <div className='login'>
          <header>
@@ -93,7 +97,4 @@ class Login extends Component {
   }
 }
 
-export default connect(
-  state=>({isLogin:state.userInfo.isLogin}),
-  {saveUserInfo}
-)(Login)
+export default Login

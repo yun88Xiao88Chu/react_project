@@ -3,16 +3,24 @@ import { Button,Modal } from "antd";
 import { FullscreenOutlined,FullscreenExitOutlined,ExclamationCircleOutlined } from '@ant-design/icons';
 import screenfull from "screenfull";
 import { connect } from "react-redux";
+import dayjs from "dayjs";
 import { deleteUserInfo } from "@/redux/actions/login";
+import { reqWeatherData } from "@/api";
 import "./css/header.less";
 import demo from "./demo.jpg";
 
 const { confirm } = Modal;
 
+@connect(
+  state=>({username:state.userInfo.user.username}),
+  {deleteUserInfo}
+)
 class Header extends Component{
 
   state = {
-    isFull:false
+    isFull:false,
+    time: dayjs().format('YYYY年MM月DD日 HH:mm:ss'), // display
+    weatherData: {}
   }
 
   logout = ()=>{
@@ -34,21 +42,38 @@ class Header extends Component{
     screenfull.request()
   }
 
+  getWeather =async ()=>{
+    //函数体
+    const result = await reqWeatherData()
+    const {dayPictureUrl,weather,temperature} = result
+    this.setState({weatherData:{dayPictureUrl,weather,temperature}})
+  }
+
   componentDidMount(){
     screenfull.onchange(()=>{ //检测屏幕改变时就改变状态数据,真正把数据改变,页面就变了
       const {isFull} = this.state
       this.setState({isFull:!isFull})
     })
+    this.timer=setInterval(() => {
+      this.setState({time:dayjs().format('YYYY年MM月DD日 HH:mm:ss')})
+    }, 1000);
+    // this.getWeather()
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.timer)
   }
 
   render(){
+    const {username} = this.props
+    const {isFull,time,weatherData} = this.state
     return (
       <div className='header'>
           <div className='header-top'>
               <Button size='small' onClick={this.fullscreen}>{/* 绑定状态数据 */}
-                {this.state.isFull? <FullscreenExitOutlined />:<FullscreenOutlined />}
+                {isFull? <FullscreenExitOutlined />:<FullscreenOutlined />}
               </Button>
-              <span className='username'>欢迎,admin</span>
+              <span className='username'>欢迎,{username}</span>
               <Button type='link' size='small' onClick={this.logout}>退出登录</Button>
           </div>
           <div className='header-bottom'>
@@ -56,10 +81,10 @@ class Header extends Component{
                 <span>首页</span>
              </div>
              <div className='bottom-right'>
-                <span>2020年5月4日 00:00:00</span>
-                <img src={demo} alt="src_img"/>
-                <span>多云转晴</span>
-                <span>温度:18~25℃</span>
+                <span>{time}</span>
+                <img src={weatherData.dayPictureUrl} alt="src_img"/>
+                <span>{weatherData.weather}</span>
+                <span>{weatherData.temperature}</span>
              </div>
           </div>
       </div>
@@ -67,7 +92,4 @@ class Header extends Component{
   }
 }
 
-export default connect(
-  state=>({}),
-  {deleteUserInfo}
-)(Header)
+export default Header

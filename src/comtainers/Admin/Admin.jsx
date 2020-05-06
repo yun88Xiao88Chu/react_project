@@ -2,15 +2,21 @@ import React, { Component } from 'react'
 import { connect } from "react-redux"
 import { Redirect } from "react-router-dom";
 import { Layout } from 'antd';
+import Check from "@/comtainers/Hoc/Check";
 import Header from "./Header/Header";
+import LeftNav from "./LeftNav/LeftNav";
 import "./css/admin.less";
 
 const { Footer, Sider, Content } = Layout;
 
+@connect(
+  state => ({isLogin:state.userInfo.isLogin}),
+  {}
+)
+@Check
 class Admin extends Component {
   
   render() {
-    if(!this.props.isLogin) return <Redirect to='/login'/>
     return (
       <Layout className='admin-container'>
         <Sider>Sider</Sider>
@@ -24,7 +30,4 @@ class Admin extends Component {
   }
 }
 
-export default connect(
-  state => ({isLogin:state.userInfo.isLogin}),
-  {}
-)(Admin)
+export default Admin
