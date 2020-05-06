@@ -1,0 +1,21 @@
+import ajax from "./ajax";
+import jsonp from "jsonp";
+import { message } from "antd";
+import { CITY,WEATHER_AK } from "@/config";
+//请求登录的函数,loginObj形如 {username:'xx',password:'xx'}
+export const reqLogin = loginObj => ajax.post('/login',loginObj)
+
+export const reqWeatherData = ()=>{
+  const URL = `http://api.map.baidu.com/telematics/v3/weather?location=${CITY}&output=json&ak=${WEATHER_AK}`
+  return new Promise((resolve)=>{
+    jsonp(URL,{
+      timeout:2000
+    },(err,data)=>{
+        if(!err){
+          resolve(data.results[0].weather_data[0])
+        }else{
+          message.error('请求天气有误,请联系管理员')
+        }
+    })
+  })
+} 
