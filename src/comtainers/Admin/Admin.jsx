@@ -31,12 +31,12 @@ class Admin extends Component {
           <LeftNav />
         </Sider>
         <Layout>
-          <Header className='header'/>
-          <Content>
+          <Header/>
+          <Content className='admin-content'>
              <Switch>
                 <Route path='/admin/home' component={Home}/>
                 <Route path='/admin/prod_about/category' component={Category}/>
-                <Route path='/admin/prod_about/category' component={Product}/>
+                <Route path='/admin/prod_about/product' component={Product}/>
                 <Route path='/admin/user' component={User}/>
                 <Route path='/admin/role' component={Role}/>
                 <Route path='/admin/charts/bar' component={Bar}/>
@@ -45,7 +45,7 @@ class Admin extends Component {
                 <Redirect to='/admin/home'/>
              </Switch>
           </Content>
-          <Footer>Footer</Footer>
+          <Footer className='admin-footer'>推荐使用谷歌浏览器，获取最佳用户体验</Footer>
         </Layout>
       </Layout>
     )

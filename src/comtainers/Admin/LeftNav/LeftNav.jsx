@@ -1,20 +1,34 @@
 import React, { Component } from 'react'
 import { Menu } from 'antd';
+import { NavLink,withRouter} from "react-router-dom";
+import { connect } from "react-redux";
 import menus from "@/config/menu_config";
+import { save_title } from "@/redux/actions/title";
 import logo from "@/assets/images/logo.png";
 import "./css/left_nav.less";
 
 const { SubMenu,Item } = Menu;
 
-export default class LeftNav extends Component {
+@connect(
+  state=>({}),
+  {save_title}
+)
+@withRouter
+class LeftNav extends Component {
 
+  saveTitle = (title)=>{
+    //函数体
+    this.props.save_title(title)
+  }
   createMenu = (menuArr)=>{
     //函数体
     return menuArr.map(menuObj=>{
       if(!menuObj.children){
-        return (
-          <Item key={menuObj.key} icon={<menuObj.icon />}>
-             {menuObj.title}
+        return (                                  /* 点击更新title */
+          <Item key={menuObj.key} onClick={()=>{this.saveTitle(menuObj.title)}}>
+             <NavLink to={menuObj.path}>
+                <menuObj.icon />{menuObj.title}
+             </NavLink>
           </Item>
         )
       }else{
@@ -26,8 +40,38 @@ export default class LeftNav extends Component {
       }
     })
   }
-  
+
+  mountErgodic=(menus)=>{
+    //得到当前路径
+    const {pathname} = this.props.location 
+    if(pathname === '/admin'){   //第一次登陆或者直接访问/admin时redux中没有title
+      this.props.save_title('首页')
+      return
+    }
+    const titleObj = result(menus)
+    function result(menus){
+     return (
+        menus.find(menuObj=>{ //递归找到和当前菜单匹配的菜单配置对象
+          if(menuObj.children){
+            return result(menuObj.children)
+          }else{
+            return menuObj.path === pathname
+          }
+        })
+      )
+    }
+     this.saveTitle(titleObj.title)
+  }
+
+      //组件挂载更新title  
+  componentDidMount(){
+    this.mountErgodic(menus)
+  }
+
   render() {
+    const {pathname} = this.props.location
+    const openedKey = pathname.split('/')
+    const checkedKey = openedKey.slice(-1)
     return (
       <div className='left-nav'>
          <div className='nav-top'>
@@ -36,11 +80,10 @@ export default class LeftNav extends Component {
          </div>
          {/* antd的Menu组件开始了 */} 
          <Menu
-              defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1']}
+              selectedKeys={checkedKey} //默认选中
+              defaultOpenKeys={openedKey}  //默认展开
               mode="inline"
               theme="dark"
-              // inlineCollapsed={this.state.collapsed}
             >
              {this.createMenu(menus)}
             </Menu>
@@ -48,3 +91,5 @@ export default class LeftNav extends Component {
     )
   }
 }
+
+export default LeftNav

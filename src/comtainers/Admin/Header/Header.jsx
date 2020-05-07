@@ -5,14 +5,18 @@ import screenfull from "screenfull";
 import { connect } from "react-redux";
 import dayjs from "dayjs";
 import { deleteUserInfo } from "@/redux/actions/login";
+import { save_title } from "@/redux/actions/title";
 import { reqWeatherData } from "@/api";
 import "./css/header.less";
 
 const { confirm } = Modal;
 
 @connect(
-  state=>({username:state.userInfo.user.username}),
-  {deleteUserInfo}
+  state=>({
+    username:state.userInfo.user.username,
+    title:state.title
+  }),
+  {deleteUserInfo,save_title}
 )
 class Header extends Component{
 
@@ -32,6 +36,7 @@ class Header extends Component{
       cancelText:'取消',
       onOk:()=>{
         this.props.deleteUserInfo()
+        this.props.save_title('')
       },
     });
   }
@@ -64,7 +69,7 @@ class Header extends Component{
   }
 
   render(){
-    const {username} = this.props
+    const {username,title} = this.props
     const {isFull,time,weatherData} = this.state
     return (
       <div className='header'>
@@ -77,7 +82,7 @@ class Header extends Component{
           </div>
           <div className='header-bottom'>
              <div className='bottom-left'>
-                <span>首页</span>
+             <span>{title}</span>
              </div>
              <div className='bottom-right'>
                 <span>{time}</span>

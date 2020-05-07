@@ -12,7 +12,7 @@ const {Item} = Form
 
 
 @connect(
-  state=>({isLogin:state.userInfo.isLogin}),
+  state =>({isLogin:state.userInfo.isLogin}),
   {saveUserInfo}
 )
 @Check

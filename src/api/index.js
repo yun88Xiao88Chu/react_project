@@ -2,6 +2,8 @@ import ajax from "./ajax";
 import jsonp from "jsonp";
 import { message } from "antd";
 import { CITY,WEATHER_AK } from "@/config";
+
+
 //请求登录的函数,loginObj形如 {username:'xx',password:'xx'}
 export const reqLogin = loginObj => ajax.post('/login',loginObj)
 
@@ -19,3 +21,5 @@ export const reqWeatherData = ()=>{
     })
   })
 } 
+
+export const reqCategoryList = () => ajax.get('/manage/category/list')

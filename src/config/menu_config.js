@@ -27,7 +27,7 @@ export default [
         title: '分类管理',
         key: 'category',
         icon: UnorderedListOutlined,
-        path: '/admin/prod_about/category'
+        path: '/admin/prod_about/category',
       },
       {
         title: '商品管理',
