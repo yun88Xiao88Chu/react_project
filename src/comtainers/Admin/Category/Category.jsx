@@ -36,6 +36,7 @@ class Category extends Component {
 
   // 新增和修改都调用同一个确认的回调
   handleOk = async e => {
+    if( !this.isreq ) return  
     const {categoryForm} = this.refs
     //获取表单输入的值
     const {name} = categoryForm.getFieldsValue()
@@ -79,8 +80,13 @@ class Category extends Component {
       let errMsgArr = []
       if(!value || !value.trim()) return Promise.reject('分类名输入不能为空')
       if(value.length < 4 ) errMsgArr.push('输入长度必须大于4')
-      if(errMsgArr.length !== 0) return Promise.reject(errMsgArr)
-      else return Promise.resolve()
+      if(errMsgArr.length !== 0){
+        this.isreq = false
+        return Promise.reject(errMsgArr)
+      } else {
+        this.isreq = true
+        return Promise.resolve()
+      }
    }
    componentDidMount(){
     this.props.save_categoryAsync()
