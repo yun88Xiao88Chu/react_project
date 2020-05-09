@@ -99,7 +99,7 @@ class Category extends Component {
       {
         title: '分类名',
         dataIndex: 'name',
-        key: 'name',
+        key: '1',
       },
       {
         title: '操作',
@@ -107,7 +107,7 @@ class Category extends Component {
         width:'20%',
         align:'center',
         render:(categoryObj)=> <Button type='link' onClick={()=>{this.showModal(categoryObj)}}>修改分类</Button>,
-        key: 'action',
+        key: '2',
       }
     ];
     return (

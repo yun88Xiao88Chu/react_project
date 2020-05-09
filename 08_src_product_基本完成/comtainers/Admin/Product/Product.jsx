@@ -21,7 +21,7 @@ export default class Product extends Component {
     if(this.isSearch){  //点击搜索之后就一直是搜索true了,点分页不生效了
        const {searchType,keyWord} = this.state
         result = await reqSearchList(searchType,keyWord,pageNumer,PAGE_SIZE)
-    }else{              //
+    }else{
         result = await reqProductList(pageNumer,PAGE_SIZE)
     }
    
